@@ -20,3 +20,4 @@ app.listen(3001, () => {
 
 
  app.use('/debates', require('./routers/debatesRoutes'));
+ app.use('/debates/debate', require('./routers/endoRoutes'));

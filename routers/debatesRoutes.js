@@ -11,6 +11,13 @@ const Router = require('express').Router();
  * add Debate router
  */
 //a new api with the ver= post, path= debate, using= debateService, target=addDebate repo 
-Router.post('/',debateService.addDebate);
+Router.post('/', debateService.addDebate);
 
-module.exports = Router;
+/**
+ * update Debate router
+ */
+Router.put('/debate/:debateId', debateService.updateDebate);
+
+Router.delete('/debate/:debateId', debateService.deleteDebate);
+
+module.exports =  Router
