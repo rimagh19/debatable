@@ -18,6 +18,6 @@ Router.post('/', debateService.addDebate);
  */
 Router.put('/debate/:debateId', debateService.updateDebate);
 
-Router.delete('/debate/:debateId', debateService.deleteDebate);
+Router.delete('/debate/:debateID', debateService.deleteDebate);
 
 module.exports =  Router

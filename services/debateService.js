@@ -38,12 +38,10 @@ const updateDebate = async function(req, res){
 
 const deleteDebate = async function(req, res){
     let {debateID} = req.params;
-    console.log({debateID});
     try{
         await debateRepo.markDebateAsDeleted(debateID);
         await res.status(204).end();
     }catch(err){
-        console.log(err);
         await res.status(400).send(err);
     }
 
