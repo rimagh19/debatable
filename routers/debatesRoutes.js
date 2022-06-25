@@ -1,23 +1,25 @@
 /**
  * debatesRoutes.js, responsabale for defining APIs/routes for debates
- * Rima Alghamdi, 2022
+ * @author Rima Alghamdi, 2022
  */
 
+/**
+ * @require ../services/* $ nodejs.express
+ */
 const debateService = require('../services/debateService');
 const Router = require('express').Router();
 
 
-/**
- * add Debate router
- */
-//a new api with the ver= post, path= debate, using= debateService, target=addDebate repo 
-Router.post('/', debateService.addDebate);
+ /**
+  * debate API routers
+
+  */
+Router.post('/', debateService.addDebate); // addDebate
+Router.put('/debate/:debateId', debateService.updateDebate); // updateDebate  
+Router.delete('/debate/:debateID', debateService.deleteDebate); // deleteDebate
+Router.get('/', debateService.parseOrderByForDebates ,debateService.getDebate); // getDebate
 
 /**
- * update Debate router
+ * change @access
  */
-Router.put('/debate/:debateId', debateService.updateDebate);
-
-Router.delete('/debate/:debateID', debateService.deleteDebate);
-
-module.exports =  Router
+module.exports =  Router;

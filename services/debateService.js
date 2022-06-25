@@ -1,33 +1,42 @@
 /**
  * debatesService.js, responsabale for managing debates bussiness logic
- * Rima Alghamdi, 2022
+ * @author Rima Alghamdi, 2022
  */
-
- const debateRepo = require('../repositories/debateRepository');
-
 
 /**
- * @param {object} req => body(summary/sedcription),header,verb,parameters
- * @param {object} res => response (code/body) - eg. 404, page not found
+ * @require ../repositories
+ */
+ const debateRepo = require('../repositories/debateRepository');
+ 
+
+/**
+ * addDebate
+ * @param {object} req              body,header,verb,params
+ * @param {object} res              response (code/body) - eg. 404, page not found
  */
 const addDebate = async function(req, res){
+    //get debtaeData
     let data = req.body;
+
     try{
-        //hold the debate body in a const
         const inserteddebate = await debateRepo.addDebate(data);
-        //send response
         await res.status(200).send(inserteddebate);
     }catch(err){
-        //send error details
         await res.status(400).send(err);
     }
 }
 
+/**
+ * UpdateDebate
+ * @param {object} req              body,header,verb,params
+ * @param {object} res              response (code/body) - eg. 404, page not found
+ */
 const updateDebate = async function(req, res){
-    //get id from url (route parameter)
+    //get id
     const {debateId} = req.params;
-    //get the data from the body
+    //get data
     const data = req.body;
+
     try{
         const updatedDebate = await debateRepo.updateDebate(debateId, data);
         await res.status(200).send(updatedDebate);
@@ -36,8 +45,15 @@ const updateDebate = async function(req, res){
     }
 }
 
+/**
+ * deleteDebate
+ * @param {object} req              body,header,verb,params
+ * @param {object} res              response (code/body) - eg. 404, page not found
+ */
 const deleteDebate = async function(req, res){
+    // get debateId
     let {debateID} = req.params;
+
     try{
         await debateRepo.markDebateAsDeleted(debateID);
         await res.status(204).end();
@@ -47,9 +63,57 @@ const deleteDebate = async function(req, res){
 
 }
 
-//export the addDebate objec (allow the servicesroutes to use it)
+/**
+ * getDebate
+ * @param {object} req              body,header,verb,params,query
+ * @param {object} res              response (code/body) - eg. 404, page not found
+ */
+const getDebate = async function(req, res){
+    //get search data
+    let {offset, limit, searchTerm, orderBy} = req.query;
+
+    // default offset if null
+    offset = offset?? 0;
+    // limit restriction
+    if(limit > 100) limit = 100;
+
+    try{
+    const debates = await debateRepo.getDebates(offset, limit, searchTerm, orderBy);
+    res.status(200).send(debates);
+    }catch(err){
+        res.status(400).send(err);
+    }
+
+}
+
+/**
+ * 
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next               move forward to the nex function
+ * @require helpers/helpers.js
+ */
+const parseOrderBy = require('../helpers/helpers.js');
+const parseOrderByForDebates = async function(req, res, next){
+    const {orderBy} = req.query;
+
+    if(!orderBy){
+        req.query.orderBy = [{column: 'created_at', order: 'desc'}];
+    }else{
+        req.query.orderBy = parseOrderBy(req.query.orderBy);
+    }
+    
+    return next();
+}
+
+
+/**
+ * change @access
+ */
 module.exports = {
     addDebate,
     updateDebate,
-    deleteDebate
+    deleteDebate,
+    getDebate,
+    parseOrderByForDebates
 }

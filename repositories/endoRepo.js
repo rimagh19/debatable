@@ -1,15 +1,16 @@
 /**
  * endoRepo.js, responsabale for managing endorsements in the debate
- * Rima Alghamdi, 2022
+ * @author Rima Alghamdi, 2022
  */
 
+/**
+ * @require knex
+ */
+const knex = require('../knexHelper');
 
- //load knex from knex helper - two dot to jump one folder
- const knex = require('../knexHelper');
- 
  /**
-  * @param {object} debateData {title,summary}
-  * @returns {object} debateData {title,summary} - inserts a new debate to the debates tabel and
+  * @param {object} endoData {debateID, userID, opinion}
+  * @returns {object} endoData {title,summary} - inserts or updates an endorsements
   */
  const addOrUpdateEndo = async function(debateID, userID, opinion){
      return await knex
@@ -21,8 +22,10 @@
          .merge()
          .returning('*');  
  }
- 
- //export the addDebate objec (allow the debatessservice to use it)
- module.exports = {
+
+/**
+ * change @access
+ */
+module.exports = {
     addOrUpdateEndo
  }
