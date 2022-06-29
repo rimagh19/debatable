@@ -6,6 +6,7 @@
 /**
  * @require ../services/* $ nodejs.express
  */
+ const {isAuthenticated} = require('../services/usersService');
  const EndoService = require('../services/endoService');
  const Router = require('express').Router();
  
@@ -13,7 +14,7 @@
  /**
   * endo API routers
   */
- Router.post('/:debateID/endorsements', EndoService.addOrUpdateEndo); // add-update endo
+ Router.post('/:debateID/endorsements', isAuthenticated , EndoService.addOrUpdateEndo); // add-update endo
  
  /**
  * change @access

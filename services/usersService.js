@@ -11,6 +11,7 @@
 const bcrypt = require('bcryptjs');
 const usersRepo = require('../repositories/usersRepo');
 const jwt = require('jsonwebtoken');
+const { indexOf } = require('lodash');
 
 /**
  * hashPassword, hash given password and store it in  the body.password field
@@ -123,8 +124,9 @@ const isAuthenticated = async function(req, res, next){
     }
 
     try{
-        const decoded = await jwt.verify(token,process.env.SECRET);
-        return next();
+        const decodedUser = await jwt.verify(token,process.env.SECRET);
+        req.user = decodedUser;
+        next();
 
     }catch(err){
         return res.status(403).send({"error": "Authentication failed"});
@@ -132,9 +134,26 @@ const isAuthenticated = async function(req, res, next){
     }
 }
 
+/**
+ * isInRole, check if the role of the user belongs to the list 
+ * @param {object} req 
+ * @param {object} res 
+ * @param {function} next 
+ */
+const isInRole = function(roles, userRole){
+    return async function(req, res, next){
+        const role = req.user.role; //get role of the user
+        if(indexOf(roles, userRole) == -1){
+            return res.status(401).send({"error": "Not Authorized, Should be: " + roles.join(',') });
+        }
+        return next();
+    }
+}
+
 module.exports = {
     hashPassword,
     registerUser,
     login,
-    isAuthenticated
+    isAuthenticated,
+    isInRole
 }

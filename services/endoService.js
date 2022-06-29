@@ -22,7 +22,7 @@ const addOrUpdateEndo = async function(req, res){
 
     try{
         const insertedEndo = await endoRepo.addOrUpdateEndo(debateID,
-                                                            data.user_id, 
+                                                            req.user.id, 
                                                             data.opinion);
         await res.status(200).send(insertedEndo);
     }catch(err){

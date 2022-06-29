@@ -17,6 +17,8 @@
 const addDebate = async function(req, res){
     //get debtaeData
     let data = req.body;
+    
+    data.user_id = req.user.id;
 
     try{
         const inserteddebate = await debateRepo.addDebate(data);

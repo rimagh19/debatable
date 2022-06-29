@@ -7,7 +7,7 @@
  * @require ../services/* $ nodejs.express
  */
 const debateService = require('../services/debateService');
-const {isAuthenticated} = require('../services/usersService');
+const {isAuthenticated, isInRole} = require('../services/usersService');
 const Router = require('express').Router();
 
 
@@ -15,9 +15,9 @@ const Router = require('express').Router();
   * debate API routers
 
   */
-Router.post('/', isAuthenticated ,debateService.addDebate); // addDebate
-Router.put('/debate/:debateId', debateService.updateDebate); // updateDebate  
-Router.delete('/debate/:debateID', debateService.deleteDebate); // deleteDebate
+Router.post('/', isAuthenticated, isInRole(['user']) , debateService.addDebate); // addDebate
+Router.put('/debate/:debateId', isAuthenticated, isInRole(['admin']), debateService.updateDebate); // updateDebate  
+Router.delete('/debate/:debateID', isAuthenticated, isInRole(['admin']), debateService.deleteDebate); // deleteDebate
 Router.get('/', debateService.parseOrderByForDebates ,debateService.getDebate); // getDebate
 
 /**
