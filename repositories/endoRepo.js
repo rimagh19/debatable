@@ -8,6 +8,12 @@
  */
 const knex = require('../knexHelper');
 
+/*
+const clearDB = async function(){
+await knex.raw('TRUNCATE TABLE users, debates, endorsemets');
+}
+clearDB();
+
  /**
   * @param {object} endoData {debateID, userID, opinion}
   * @returns {object} endoData {title,summary} - inserts or updates an endorsements

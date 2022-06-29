@@ -28,5 +28,6 @@ app.listen(3001, () => {
 /**
  * @require ./routers/*
  */
+ app.use('/users', require('./routers/usersRoute'));
  app.use('/debates', require('./routers/debatesRoutes'));
  app.use('/debates/debate', require('./routers/endoRoutes'));
