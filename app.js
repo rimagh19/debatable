@@ -31,3 +31,7 @@ app.listen(3001, () => {
  app.use('/users', require('./routers/usersRoute'));
  app.use('/debates', require('./routers/debatesRoutes'));
  app.use('/debates/debate', require('./routers/endoRoutes'));
+
+ module.expoerts ={
+  app
+ }
