@@ -76,13 +76,13 @@ const login = async function(req, res, next){
     //check if email exists - if not return error
     const user = await usersRepo.findUserByEmail(email);
     if(!user){
-        return res.status(404).send({error: 'email or password is not correct'});
+        return res.status(403).send({error: 'email or password is not correct'});
     }
     //hash given password
     const isMatch = await bcrypt.compare(password, user.password);
     //check if hashed passwords matches - if not return error
     if(!isMatch){
-        return res.status(404).send({error: 'email or password is not correct'});
+        return res.status(403).send({error: 'email or password is not correct'});
     }
     //if matches make-return JWT
     const response = await signInUser(user);
@@ -90,7 +90,6 @@ const login = async function(req, res, next){
     res.status(200).send(response);
 
     }catch(err){
-        console.log(err);
         res.status(400).send(err);
 
     }

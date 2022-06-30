@@ -26,6 +26,7 @@ const addOrUpdateEndo = async function(req, res){
                                                             data.opinion);
         await res.status(200).send(insertedEndo);
     }catch(err){
+        console.log(err);
         await res.status(400).send(err);
     }
 }

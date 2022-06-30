@@ -59,7 +59,6 @@ const prepareDataBase = async function(){
             user_id: user.id
         })
         .returning('*');
-        console.log(user, debate);
     return {user, debate: debate[0]} //return user + first debate
 
 }
