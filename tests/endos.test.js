@@ -75,7 +75,7 @@ describe('testing debatable project', async function(){
         });
 
         it('should not make endorsements if user is not logged in (token is missing)', async function(){           
-            opinion = faker.helpers.arrayElement(['for' , 'against','neutral']);
+            opinion = faker.helpers.arrayElement(['for' , 'against','netural']);
 
             const endorsementResponse = await request(app)
                 .post('/debates/debate/'+testData.debate.id + '/endorsements')
@@ -103,34 +103,33 @@ describe('testing debatable project', async function(){
             token.should.not.be.null;
 
             //DETERMINE TWO RANDOM EDNORSEMENTS
-            const opinion1 = faker.helpers.arrayElements(['for', 'against', 'neutral']);
-            const opinion2 = faker.helpers.arrayElements(['for', 'against', 'neutral']);
+            const opinions = faker.helpers.arrayElements( ['for' ,'against', 'netural'], 2);
 
+
+            
             //CREATE 1ST ENDO
             const endorsementResponse1 = await request(app)
                 .post('/debates/debate/'+testData.debate.id + '/endorsements')
                 .set('token', token)
-                .send({opinion1})
+                .send({opinion: opinions[0]})
                 .expect(200);
 
             //CREATE 2ND ENDO
             const endorsementResponse2 = await request(app)
                 .post('/debates/debate/'+testData.debate.id + '/endorsements')
                 .set('token', token)
-                .send({opinion2})
+                .send({opinion: opinions[1]})
                 .expect(200);
             
-            
+ 
             //CHECK NO ENDOS IN THE DB
             const NoEndos = await knex.count('*').from('endorsemets');
             NoEndos[0].count.should.equal('1');
             
-            
             //CHECK THE VALUE OF THE OPINION (SHOULD BE THE2ND ONE)
-            const storedEndo = await knex.select('opinion').from('endorsemets').first();
-            storedEndo[0].opinion.should.equal({opinion: opinion1});
-
-
+            const storedEndo = await knex.select('*').from('endorsemets').first();
+            storedEndo.opinion.should.equal(opinions[1]);
+        
         });
 
 
